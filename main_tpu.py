@@ -33,12 +33,20 @@ def main():
     model.load_pre_trained_model()
     model = model.create_model(y_train.shape[0])
 
-    model.fit(x_train,
+    tpu_address = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+    strategy = tf.contrib.tpu.TPUDistributionStrategy(
+        tf.contrib.cluster_resolver.TPUClusterResolver(tpu=tpu_address)
+    )
+
+    with tf.keras.utils.custom_object_scope(get_custom_objects()):
+        tpu_model = tf.contrib.tpu.keras_to_tpu_model(model, strategy=strategy)
+
+    tpu_model.fit(x_train,
               y_train,
               epochs=EPOCHS,
               batch_size=BATCH_SIZE
               )
-    model.save('.//h5models//run1.h5')
+    tpu_model.save('.//h5models//run1.h5')
 
 def gelu(x):
     return 0.5 * x * (1.0 + erf(x / sqrt(2.0)))
