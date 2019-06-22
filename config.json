@@ -1,0 +1,23 @@
+{
+  "setup":{
+    "load": true,
+    "run_num": "run1.h5"
+      },
+  "paths":{
+    "pretrained_model": "uncased_L-12_H-768_A-12/",
+    "config_path": "uncased_L-12_H-768_A-12/bert_config.json",
+    "ckpt_path": "uncased_L-12_H-768_A-12/bert_model.ckpt",
+    "vocab_path": "uncased_L-12_H-768_A-12/vocab.txt",
+    "data_dir": "data/smalltest.csv"
+  },
+  "model": {
+    "seq_len": 128,
+    "shuffle": 200,
+    "epochs": 1,
+    "batch_size":16,
+    "layer3": 3,
+    "lr": 0.0001,
+    "loss_fn": "sparse_categorical_crossentropy",
+    "metrics": "sparse_categorical_accuracy"
+  }
+}
