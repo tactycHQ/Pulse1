@@ -43,6 +43,6 @@ if __name__ == '__main__':
     predict = Predict(model_path)
 
     # predict.test()
-    # predict.validate()
+    predict.validate()
     # predict.convert_to_pb()
 

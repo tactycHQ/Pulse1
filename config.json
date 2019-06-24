@@ -1,21 +1,21 @@
 {
   "setup":{
-    "run_num": "run1.h5"
+    "run_num": "run3.h5"
       },
   "paths":{
     "pretrained_model": "uncased_L-12_H-768_A-12/",
     "config_path": "uncased_L-12_H-768_A-12/bert_config.json",
     "ckpt_path": "uncased_L-12_H-768_A-12/bert_model.ckpt",
     "vocab_path": "uncased_L-12_H-768_A-12/vocab.txt",
-    "train_data_dir": "data/smalltest.csv",
+    "train_data_dir": "data/train.csv",
     "val_data_dir": "data/dev.csv",
     "test_data_dir": "data/dev.csv"
   },
   "model": {
     "seq_len": 128,
     "shuffle": 200,
-    "epochs": 5,
-    "batch_size":16,
+    "epochs": 10,
+    "batch_size":32,
     "lr": 0.0001,
     "loss_fn": "sparse_categorical_crossentropy",
     "metrics": "sparse_categorical_accuracy"
