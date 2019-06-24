@@ -23,6 +23,7 @@ class Predict:
         x_test = processor.get_test_examples(self.test_data_dir)
 
         predictions = self.model.predict(x_test)
+
         np.savetxt(".//outputs//predictions.csv",predictions,delimiter=",")
         print("Predictions saved")
 
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     model_path = 'h5models/run2.h5'
     predict = Predict(model_path)
 
-    # predict.test()
-    predict.validate()
+    predict.test()
+    # predict.validate()
     # predict.convert_to_pb()
 

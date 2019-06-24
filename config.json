@@ -9,7 +9,7 @@
     "vocab_path": "uncased_L-12_H-768_A-12/vocab.txt",
     "train_data_dir": "data/train.csv",
     "val_data_dir": "data/dev.csv",
-    "test_data_dir": "data/dev.csv"
+    "test_data_dir": "data/spot.csv"
   },
   "model": {
     "seq_len": 128,
