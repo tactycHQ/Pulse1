@@ -20,6 +20,7 @@ def main():
     x_train, y_train = processor.get_train_examples(data_dir)
     num_samples = y_train.shape[0]
 
+
     model = BertModel(config.paths.config_path,
                       config.paths.ckpt_path,
                       config.model.seq_len,
