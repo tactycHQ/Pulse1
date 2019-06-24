@@ -8,7 +8,7 @@
     "config_path": "uncased_L-12_H-768_A-12/bert_config.json",
     "ckpt_path": "uncased_L-12_H-768_A-12/bert_model.ckpt",
     "vocab_path": "uncased_L-12_H-768_A-12/vocab.txt",
-    "data_dir": "data/train_large.csv"
+    "data_dir": "data/train.csv"
   },
   "model": {
     "seq_len": 128,
