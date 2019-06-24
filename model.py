@@ -23,7 +23,7 @@ class BertModel():
                                                 seq_len = self.seq_len,
         )
 
-    def finetune_model(self,data_size,loss_fn,metrics):
+    def compile_model(self,data_size,loss_fn,metrics):
         inputs = self.pretrained_model.inputs[:2]
         dense = self.pretrained_model.get_layer('NSP-Dense').output
         outputs = keras.layers.Dense(units=2, activation='softmax')(dense)
@@ -41,6 +41,7 @@ class BertModel():
             metrics=[metrics],
         )
         self.model = model
+        print(self.model.summary())
         return self.model
 
     def load(self, checkpoint_path):
