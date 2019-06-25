@@ -23,17 +23,12 @@ class Client:
     def test(self):
 
         data = np.array([
-                "'1 more weeek until Spider-Man Far From Home comes out & we are so fucking excited,,',",
-                "'was cheesy as hell, but I am here for it,,',",
-                "'we went to see again and we sat near an elderly couple and they were just the cutest! this just proves disney magic is timeless,,',",
-                "'I’ve seen it 5 times since it came out hahaha. I’ve voted too many times to count ,,',",
-                "'Gonna see Rocketman again tomorrow bitch,,',",
-                "'Went to see #Rocketman again tonight. Two hours of joyous escapism. Saturday Night's Alright still my favourite. ,,',",
-                "'Just cried watching Rocketman, think I'm having a nervous breakdown.,,',",
-                "'Longtime EJ/BT fan and I just got home from watching this epic film. I cried almost the entire time, sometimes for happy memories of my youth in the 70s (and my first EJ experiences), and sometimes for sad, but ending with uplifting. Thank you Elton! Definitely award material!,,',",
-                "'seeing rocketman tonight FINALLY,,',",
-                "'Watching Chernobyl and it’s a struggle. Amazing accounts but so sad,,',",
-                "'first episode into #ChernobylHBO its unreal!,,',"
+                "'I am so excited for Ozarks",
+                "I have seen many shows better than Ozark",
+                "Ozark is strictly ok",
+                "Can't wait for Ozark",
+                "I am not happy",
+                "The action in Ozark isn't really all that great"
         ])
 
         token_dict = {}
@@ -50,8 +45,8 @@ class Client:
 
         x_test = [indices,np.zeros_like(indices)]
         predictions = self.model.predict(x_test)
-
-        print(np.array(predictions).argmax(axis=-1))
+        np.savetxt('.//outputs//predictions.csv',np.array(predictions),delimiter=",")
+        print(np.array(predictions))
 
 
 if __name__ == '__main__':
