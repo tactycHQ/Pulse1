@@ -2,9 +2,9 @@
 import os
 import numpy as np
 os.environ['TF_KERAS'] = '1'
-from data import twitterProcessor
+from Dataloader import twitterProcessor
 import tensorflow as tf
-from model import BertModel
+from Model import BertModel
 from keras_bert import bert, gen_batch_inputs, get_base_dict, get_custom_objects
 from utils.config import get_config_from_json
 from tensorflow.data import Dataset

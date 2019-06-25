@@ -1,7 +1,7 @@
 #Pulse I
 import os
 os.environ['TF_KERAS'] = '1'
-from data import twitterProcessor
+from Dataloader import twitterProcessor
 import tensorflow as tf
 from keras_bert import get_custom_objects, Tokenizer
 from utils.config import get_config_from_json

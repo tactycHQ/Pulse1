@@ -10,11 +10,8 @@ access_token_key='3722095873-ums9qpIH3g7Y3YJ5kvh3nNMbbslg1gvXrY1Tq8K'
 access_token_secret='yhwDe9kOlU0boWNMlsXYxS6CVfkJvJfLF2Y8NoRn5PlXQ'
 
 auth = tw.AppAuthHandler(consumer_key, consumer_secret)
-# auth.set_access_token(access_token_key, access_token_secret)
-
 api = tw.API(auth)
 limit = api.rate_limit_status()
-# limit_dict = json.load(limit)
 limit = DotMap(limit)
 print(limit.resources.search)
 
@@ -24,7 +21,6 @@ class GetTwitter():
         pass
 
     def getTweetsbyQuery(self,query,max_tweets,date_since):
-
         tweet_text = []
         tweet_location = []
 
@@ -45,11 +41,15 @@ class GetTwitter():
         tweet_location = np.array(tweet_text)
         return tweet_text, tweet_location
 
+    def cleanTweets(selfs, tweet):
+        return tweet
+
+
+
 if __name__ == '__main__':
-    query = 'avengers'
-    max_tweets = 10
+    query = 'avengers OR houseofcards'
+    max_tweets = 100
     date_since = "2019-06-01"
 
     getTwitter = GetTwitter()
     tweet_text, tweet_location = getTwitter.getTweetsbyQuery(query,max_tweets,date_since)
-    print(tweet_text)
