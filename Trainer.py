@@ -13,44 +13,46 @@ from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
 class Trainer:
 
     def __init__(self):
+        self.config = get_config_from_json('.//config.json')
         self.callbacks=[]
         self.init_callbacks()
         self.train()
 
-    def train(self):
-        # Processing config file
-        config = get_config_from_json('.//config.json')
-        train_data_dir = config.paths.train_data_dir
-        val_data_dir = config.paths.val_data_dir
 
-        train_processor = twitterProcessor(config.paths.vocab_path, train_data_dir, config.model.seq_len)
+    def train(self):
+        train_data_dir = self.config.paths.train_data_dir
+        val_data_dir = self.config.paths.val_data_dir
+
+        train_processor = twitterProcessor(self.config.paths.vocab_path, train_data_dir, self.config.model.seq_len)
         x_train, y_train = train_processor.get_train_examples(train_data_dir)
         num_samples = y_train.shape[0]
-        batch_size = config.model.batch_size
+        batch_size = self.config.model.batch_size
 
-        val_processor = twitterProcessor(config.paths.vocab_path, val_data_dir, config.model.seq_len)
+        val_processor = twitterProcessor(self.config.paths.vocab_path, val_data_dir, self.config.model.seq_len)
         x_val, y_val = train_processor.get_train_examples(val_data_dir)
 
-        model = BertModel(config.paths.config_path,
-                          config.paths.ckpt_path,
-                          config.model.seq_len,
-                          config.model.batch_size,
-                          config.model.epochs,
-                          config.model.lr)
+        model = BertModel(self.config.paths.config_path,
+                          self.config.paths.ckpt_path,
+                          self.config.model.seq_len,
+                          self.config.model.batch_size,
+                          self.config.model.epochs,
+                          self.config.model.lr)
         print("Model instantiated")
 
-        model = model.compile_model(num_samples, config.model.loss_fn,config.model.metrics)
+        model = model.compile_model(num_samples,
+                                    self.config.model.loss_fn,
+                                    self.config.model.metrics)
         print("Model compiled. Commencing training")
 
         model.fit(x=x_train,
                   y=y_train,
                   validation_data=(x_val,y_val),
-                  epochs=config.model.epochs,
+                  epochs=self.config.model.epochs,
                   batch_size=batch_size,
                   callbacks=self.callbacks
                   )
 
-        model.save('.//h5models//'+config.setup.run_num)
+        model.save(self.config.callbacks.save_dir+self.config.setup.run_num)
         print("Model saved succesfully as H5 file")
 
     def init_callbacks(self):
@@ -64,6 +66,16 @@ class Trainer:
             TensorBoard(
                 log_dir='.\\logs\\tensorboard_logs\\',
                 write_graph=True,
+            )
+        )
+        self.callbacks.append(
+            ModelCheckpoint(
+                filepath=self.config.callbacks.save_dir+self.config.setup.run_num,
+                monitor=self.config.callbacks.checkpoint_monitor,
+                mode=self.config.callbacks.checkpoint_mode,
+                save_best_only=self.config.callbacks.checkpoint_save_best_only,
+                save_weights_only=self.config.callbacks.checkpoint_save_weights_only,
+                verbose=self.config.callbacks.checkpoint_verbose,
             )
         )
 
