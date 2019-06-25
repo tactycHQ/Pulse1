@@ -57,14 +57,14 @@ class Trainer:
 
     def init_callbacks(self):
         self.callbacks.append(
-            CSVLogger('.\\logs\\training_log.csv',
+            CSVLogger('.//logs//training_log.csv',
                       separator=',',
                       append=False)
         )
 
         self.callbacks.append(
             TensorBoard(
-                log_dir='.\\logs\\tensorboard_logs\\',
+                log_dir='.//logs//tensorboard_logs//',
                 write_graph=True,
             )
         )
