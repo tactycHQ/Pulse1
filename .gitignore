@@ -127,3 +127,15 @@ dmypy.json
 /bert_model/
 /data/
 /uncased_L-12_H-768_A-12/
+/config.json
+/APICalls/tweets.csv
+/outputs/predictions.csv
+.idea/workspace.xml
+APICalls/json
+APICalls/tweets.csv
+Analysis/
+h5models/
+logs/
+outputs/
+served_models/
+/APICalls/keys.json

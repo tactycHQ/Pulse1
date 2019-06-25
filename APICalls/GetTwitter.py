@@ -7,6 +7,7 @@ import codecs
 import unidecode
 import re
 import spacy
+from config import get_config_from_json
 
 nlp = spacy.load('en_core_web_lg')
 contraction_mapping = {"ain't": "is not", "aren't": "are not","can't": "cannot",
@@ -53,11 +54,8 @@ contraction_mapping = {"ain't": "is not", "aren't": "are not","can't": "cannot",
                    "you'd": "you would", "you'd've": "you would have", "you'll": "you will",
                    "you'll've": "you will have", "you're": "you are", "you've": "you have" }
 
-consumer_key='TCAQaSJq0qAjsWyKZdakGssNN'
-consumer_secret='o55EyHnqW5NNA05ds29Nvpmg7VkTkpdY2s76EwA6oUfIv8siea'
-access_token_key='3722095873-ums9qpIH3g7Y3YJ5kvh3nNMbbslg1gvXrY1Tq8K'
-access_token_secret='yhwDe9kOlU0boWNMlsXYxS6CVfkJvJfLF2Y8NoRn5PlXQ'
-auth = tw.AppAuthHandler(consumer_key, consumer_secret)
+keys = get_config_from_json('.//keys.json')
+auth = tw.AppAuthHandler(keys.twitter_keys.consumer_key, keys.twitter_keys.consumer_secret)
 api = tw.API(auth)
 limit = api.rate_limit_status()
 limit = DotMap(limit)
