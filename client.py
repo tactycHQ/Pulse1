@@ -7,6 +7,9 @@ from keras_bert import get_custom_objects, Tokenizer
 from utils.config import get_config_from_json
 import numpy as np
 import codecs
+import pandas as pd
+import logging
+logging.basicConfig(level=logging.INFO)
 
 class Client:
 
@@ -16,20 +19,26 @@ class Client:
         self.vocab_path = self.config.paths.vocab_path
         self.val_data_dir = self.config.paths.val_data_dir
         self.test_data_dir = self.config.paths.test_data_dir
-        self.model = tf.keras.models.load_model(self.load_path, custom_objects=get_custom_objects())
-        print("Model loaded succesfully from " + self.load_path)
 
-    # Test on unlabelled data
-    def test(self):
+    # Flattens data
+    def flat_queries(selfs, tweet_path):
+        clean_tweets_df = pd.read_pickle(tweet_path)
+        title = []
+        rawTweet = []
+        cleanTweet = []
 
-        data = np.array([
-                "'I am so excited for Ozarks",
-                "I have seen many shows better than Ozark",
-                "Ozark is strictly ok",
-                "Can't wait for Ozark",
-                "I am not happy",
-                "The action in Ozark isn't really all that great"
-        ])
+        for index, row in clean_tweets_df.iterrows():
+            for raw, clean in zip(row['rawTweetResults'],row['cleanTweetResults']):
+                cleanTweet.append(clean)
+                rawTweet.append(raw)
+                title.append(row['title'])
+
+        queries_df = pd.DataFrame({'title':title,'rawTweet':rawTweet,'cleanTweet':cleanTweet})
+        return queries_df
+
+    def getBERTScore(self,queries_df):
+
+        tweets = queries_df['cleanTweet']
 
         token_dict = {}
         with codecs.open(self.vocab_path, 'r', 'utf8') as reader:
@@ -39,19 +48,35 @@ class Client:
         tokenizer = Tokenizer(token_dict)
 
         indices = []
-        for index,line in enumerate(data):
+        for index,line in enumerate(tweets):
             ids, segments = tokenizer.encode(line.strip(),max_len=128)
             indices.append(ids)
 
         x_test = [indices,np.zeros_like(indices)]
         predictions = self.model.predict(x_test)
-        np.savetxt('.//outputs//predictions.csv',np.array(predictions),delimiter=",")
-        print(np.array(predictions))
+
+        return predictions
+
+    def writePredictions(self,queries_df,predictions):
+        queries_df['bertNEG'] = predictions[:,0]
+        queries_df['bertPOS'] = predictions[:, 1]
+        queries_df.to_csv("outputs//query_results_bert.csv")
+        return queries_df
+
+    def loadBERT(self):
+        self.model = tf.keras.models.load_model(self.load_path, custom_objects=get_custom_objects())
+        print("Model loaded succesfully from " + self.load_path)
 
 
 if __name__ == '__main__':
-    model_path = 'h5models/run2.h5'
-    predict = Client(model_path)
-    predict.test()
-    # predict.convert_to_pb()
+    model_path = 'h5models/run3.h5'
+    tweet_path = 'C://Users//anubhav//Desktop//Projects//Gemini1//Database//query_results.pkl'
+
+    client = Client(model_path)
+    flatQueries = client.flat_queries(tweet_path)
+    client.loadBERT()
+    BERTpreds = client.getBERTScore(flatQueries)
+    client.writePredictions(flatQueries,BERTpreds)
+
+
 
